@@ -58,7 +58,7 @@ def scrape_company_info(company="Meta"):
     company_rating = soup.find("span", class_="css-htn3vt").text
 
     return (company_image, company_rating)
-
+# *****************************************************************
 if __name__ == "__main__":
     company = 'instagram'
     reviews = scrape(company)
