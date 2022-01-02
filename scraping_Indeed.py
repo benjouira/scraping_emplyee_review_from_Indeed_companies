@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-
 url = f"https://www.indeed.com/cmp"
 page_Limit = 500
 
