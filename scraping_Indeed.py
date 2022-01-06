@@ -81,3 +81,6 @@ if __name__ == "__main__":
     cmpInfo = scrape_company_info(company)
     print(cmpInfo)
     pass
+
+# https://www.indeed.com/cmp/Dollar-General/reviews?start=00
+# the company link in indeed
