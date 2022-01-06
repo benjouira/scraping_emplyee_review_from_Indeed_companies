@@ -2,8 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
+
 url = f"https://www.indeed.com/cmp"
-page_Limit = 500
+page_Limit = 1000000
 
 def build_url(base_url = url , company="Meta", page = 0):
     # page 2 url exemple 
@@ -21,17 +22,17 @@ def scrape_page(page=0,company="Meta"):
     for r in reviewsfeild:
         title = r.find(class_= "css-82l4gy").text
         review = r.find(class_= "css-1cxc9zk").find(class_="css-82l4gy").text
-    # employee info contains the job title, employee current satet, 
-    # the company branch location and the review date 
-    # ex: "Assistant Store Manager/Cashier (Former Employee) - Ahoskie, NC - December 30, 2021"
+        # employee info contains the job title, employee current satet,the company branch location and the review date 
+        # ex: "Assistant Store Manager/Cashier (Former Employee) - Ahoskie, NC - December 30, 2021"
         employee_Info = r.find(class_= "css-xvmbeo").text
         rating = r.find(class_= "css-1c33izo").text
+
         reviews.append(
             
             {
+                "employee_Info" : employee_Info,
                 "title" : title,
                 "review" : review,
-                "employee_Info" : employee_Info,
                 "rating" : rating,
             }
         )
@@ -40,13 +41,14 @@ def scrape_page(page=0,company="Meta"):
 
 def scrape(company):
     # Functio to scrape to page_limit
-    questions = []
+    all_data = []
     for i in range(0,page_Limit+1,20):
-        page_questions = scrape_page (i,company)
-        if page_questions in questions:
+        page_data = scrape_page (i,company)
+        if page_data in all_data:
             break
-        questions.append(page_questions)
-    return questions
+        all_data.append(page_data)
+    return all_data
+
 # *****************************************************************
 def scrape_company_info(company="Meta"):
     url = f"https://www.indeed.com/cmp/{company}/reviews?start=00"
@@ -58,12 +60,23 @@ def scrape_company_info(company="Meta"):
     company_rating = soup.find("span", class_="css-htn3vt").text
 
     return (company_image, company_rating)
-# *****************************************************************
+
+# ******************************************************************
+# save data in csv file
+def export_data(company):
+    all_data = scrape(company)
+    with open(f"{company}_employee_reviews.csv", "w") as data_file:
+        fieldnames = ["employee_Info","title","review","rating"]
+        data_writer = csv.DictWriter(data_file, fieldnames=fieldnames, delimiter="~")
+        data_writer.writeheader()
+        for data in all_data:
+            for d in data:
+                data_writer.writerow(d)
+        print("Done")
+
 if __name__ == "__main__":
-    company = 'instagram'
-    reviews = scrape(company)
+    company = 'Dollar-General'
+    export_data(company)
     cmpInfo = scrape_company_info(company)
-    print(reviews)
-    print(len(reviews))
     print(cmpInfo)
     pass
