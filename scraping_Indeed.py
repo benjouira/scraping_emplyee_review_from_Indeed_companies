@@ -75,6 +75,7 @@ def export_data(company):
         print("Done")
 
 if __name__ == "__main__":
+#     write here the company you want to scrap data from it
     company = 'Dollar-General'
     export_data(company)
     cmpInfo = scrape_company_info(company)
