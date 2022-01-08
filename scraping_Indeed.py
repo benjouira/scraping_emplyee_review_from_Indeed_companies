@@ -65,7 +65,7 @@ def scrape_company_info(company="Meta"):
 # save data in csv file
 def export_data(company):
     all_data = scrape(company)
-    with open(f"{company}_employee_reviews.csv", "w") as data_file:
+    with open("./dataSets/"+f"{company}_employee_reviews.csv", "w", encoding="utf-8") as data_file:
         fieldnames = ["employee_Info","title","review","rating"]
         data_writer = csv.DictWriter(data_file, fieldnames=fieldnames, delimiter="~")
         data_writer.writeheader()
@@ -75,12 +75,8 @@ def export_data(company):
         print("Done")
 
 if __name__ == "__main__":
-#     write here the company you want to scrap data from it
-    company = 'Dollar-General'
+    company = "Meta"
     export_data(company)
     cmpInfo = scrape_company_info(company)
     print(cmpInfo)
     pass
-
-# https://www.indeed.com/cmp/Dollar-General/reviews?start=00
-# the company link in indeed
